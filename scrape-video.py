@@ -44,9 +44,9 @@ def get_job_details(url):
     return desc
 
 base = "https://www.freelancer.com"
-urls = [(base + "/jobs/video-production_video-editing_videography_video-services_after-effects_animation_threed-animation_twod-animation_flash-animation/?languages=en&results=100", 1)]
-#urls = []
-for i in range(2, 70):
+# urls = [(base + "/jobs/video-production_video-editing_videography_video-services_after-effects_animation_threed-animation_twod-animation_flash-animation/?languages=en&results=100", 1)]
+urls = []
+for i in range(18, 70):
     path = "/jobs/video-production_video-editing_videography_video-services_after-effects_animation_threed-animation_twod-animation_flash-animation/" + str(i) + "/?languages=en&results=100"
     urls.append((base + path, i))
 
