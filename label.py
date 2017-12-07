@@ -14,7 +14,7 @@ labels = ["Lo-Fi UI Sketches", "UX Testing", "Interactive mockup", "Visual Desig
 
 labels_print = '\n'.join([str(i) + ": " + s for i, s in enumerate(labels)])
 
-output_file = "output.tsv"
+output_file = "labels-output.tsv"
 
 for root, dirs, files in os.walk(args.dir):
     for f in files:
@@ -23,8 +23,6 @@ for root, dirs, files in os.walk(args.dir):
             print("skipping " + f)
             continue
         path = root + "/" + f
-
-        print("ON " + path)
 
         with open(path, "r") as datfile:
             data = json.load(datfile)
@@ -36,6 +34,7 @@ for root, dirs, files in os.walk(args.dir):
                 print(labels_print)
                 
                 text = input("Enter matching label numbers comma-separated (blank to pass):")  # Python 3
+                print("^ was " + path + ", " + elem['url'])
                 text = "-" if text == "" else text
                 with open(output_file, "a") as out:
                     out.write(elem['url'] + "\t" + text + "\n")
