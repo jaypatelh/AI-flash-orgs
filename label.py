@@ -16,17 +16,20 @@ labels_print = '\n'.join([str(i) + ": " + s for i, s in enumerate(labels)])
 
 output_file = "labels-output.tsv"
 
+cnt = 0
+
 for root, dirs, files in os.walk(args.dir):
     for f in files:
         f_no = int(re.match(reg, f).group(1))
         if f_no < int(args.start):
-            print("skipping " + f)
             continue
         path = root + "/" + f
 
         with open(path, "r") as datfile:
             data = json.load(datfile)
             for elem in data:
+                print("=> LABELED SO FAR: " + str(cnt))
+                print()
                 print(elem['title'])
                 print("-" * len(elem['title']))
                 print(elem['desc'])
@@ -34,9 +37,11 @@ for root, dirs, files in os.walk(args.dir):
                 print("skills:", elem['skills'])
                 print("===================================")
                 print(labels_print)
-                
-                text = input("Enter matching label numbers comma-separated (blank to pass):")  # Python 3
+                print()
+                text = input("=> Enter matching label numbers comma-separated (blank to pass): ")  # Python 3
                 print("^ was " + path + ", " + elem['url'])
+                if text != "":
+                    cnt += 1
                 text = "-" if text == "" else text
                 with open(output_file, "a") as out:
                     out.write(elem['url'] + "\t" + text + "\t" + str(f_no) + "\n")
