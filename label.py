@@ -26,10 +26,12 @@ for root, dirs, files in os.walk(args.dir):
 
         with open(path, "r") as datfile:
             data = json.load(datfile)
-            for elem in data[:2]:
+            for elem in data:
                 print(elem['title'])
                 print("-" * len(elem['title']))
                 print(elem['desc'])
+                print()
+                print("skills:", elem['skills'])
                 print("===================================")
                 print(labels_print)
                 
@@ -37,5 +39,5 @@ for root, dirs, files in os.walk(args.dir):
                 print("^ was " + path + ", " + elem['url'])
                 text = "-" if text == "" else text
                 with open(output_file, "a") as out:
-                    out.write(elem['url'] + "\t" + text + "\n")
+                    out.write(elem['url'] + "\t" + text + "\t" + str(f_no) + "\n")
                 _=os.system("clear")
