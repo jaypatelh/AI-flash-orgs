@@ -26,6 +26,13 @@ def get_jobs(url):
 
         obj['desc'] = get_job_details(base + obj['url'])
 
+        skills = []
+        skillsdiv = job.find('div', class_='JobSearchCard-primary-tags')
+        for s in skillsdiv.find_all('a', class_='JobSearchCard-primary-tagsLink'):
+            skills.append(s.text.strip())
+
+        obj['skills'] = skills
+
         jobs.append(obj)
 
     return jobs
@@ -44,14 +51,15 @@ def get_job_details(url):
     return desc
 
 base = "https://www.freelancer.com"
-#urls = [base + "/jobs/regions/?keyword=mobile&results=100"]
-urls = []
-for i in range(52, 79):
-    urls.append(base + "/jobs/regions/" + str(i) + "/?keyword=mobile&results=100")
+urls = [(base + "/jobs/mobile-phone_app-developer_android_iphone_ios-development_mobile-app-testing/?languages=en&results=100", 1)]
+#urls = []
+for i in range(2, 141):
+    path = "/jobs/mobile-phone_app-developer_android_iphone_ios-development_mobile-app-testing/" + str(i) + "/?languages=en&results=100"
+    urls.append((base + path, i))
 
-for idx, url in enumerate(urls):
-    print("DOING MAIN URL:" + url)
-    jobs = get_jobs(url)
-    with open("data" + str(idx+1) + ".json", "w") as jsonfile:
+for url in urls:
+    print("DOING MAIN URL:" + url[0])
+    jobs = get_jobs(url[0])
+    with open("mobile-phone-w-skills/data" + str(url[1]) + ".json", "w") as jsonfile:
         json.dump(jobs, jsonfile)
     time.sleep(30)

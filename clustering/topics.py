@@ -84,20 +84,21 @@ translator = str.maketrans('', '', string.punctuation)
 vocab = {}
 descriptions = []
 titles = []
-for i in range(1,51):
-    with open('../freelancer-com-scrape/data' + str(i) + '.json') as jf:
+for i in range(1,140):
+    with open('../mobile-phone/data' + str(i) + '.json') as jf:
         jd = json.load(jf)
         for d in jd:
             #combined = d['desc'] + ' ' + d['title']
             combined = d['desc']
             cd = combined.replace("[url removed, login to view]", "")
-            cd = cd.translate(translator)
+            sentences = cd.split(".")
 
-            vcb, split_cd = unigrams(cd)
-            add_dict_counts(vocab, vcb)
-            descriptions.append(split_cd)
-            
-            titles.append(d['title'])
+            for sentence in sentences:
+                cd = sentence.translate(translator)
+                vcb, split_cd = unigrams(cd)
+                add_dict_counts(vocab, vcb)
+                descriptions.append(split_cd)
+                titles.append(d['title'])
 
 vocab, all_counts = filter_below_threshold(vocab)
 #for k in sorted(all_counts.keys(), key=lambda x: int(x)):
@@ -111,7 +112,7 @@ print("vocab size:", str(vocab_size))
 mat = None
 cnt = 1
 for desc in descriptions:
-    if cnt > 5000:
+    if cnt > 10000:
         break
     if cnt % 200 == 0:
         print("count:", cnt)
@@ -129,7 +130,7 @@ for desc in descriptions:
 print(mat.shape)
 print(mat)
 
-model = lda.LDA(n_topics=4, n_iter=20000, random_state=1)
+model = lda.LDA(n_topics=2, n_iter=20000, random_state=1)
 model.fit(mat)  # model.fit_transform(X) is also available
 
 topic_word = model.topic_word_  # model.components_ also works
